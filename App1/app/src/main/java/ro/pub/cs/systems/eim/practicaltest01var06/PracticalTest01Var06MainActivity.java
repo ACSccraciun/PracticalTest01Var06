@@ -2,12 +2,14 @@ package ro.pub.cs.systems.eim.practicaltest01var06;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -51,13 +53,32 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
     private void buttonListeners() {
         play_button.setOnClickListener(v -> {
             ArrayList<String> generated = Constants.generateRandom();
+            Integer count_checks = 0;
 
-            if (!hold1_checked)
+            if (!hold1_checked) {
                 numar1.setText(generated.get(0));
-            if (!hold2_checked)
+                count_checks++;
+            }
+            if (!hold2_checked) {
                 numar2.setText(generated.get(1));
-            if (!hold3_checked)
+                count_checks++;
+            }
+            if (!hold3_checked) {
                 numar3.setText(generated.get(2));
+                count_checks++;
+            }
+
+            Intent intent = new Intent(PracticalTest01Var06MainActivity.this, PracticalTest01Var06SecondaryActivity.class);
+
+
+            intent.putExtra("numar1", generated.get(0));
+            intent.putExtra("numar2", generated.get(1));
+            intent.putExtra("numar3", generated.get(2));
+
+            intent.putExtra("checks", count_checks);
+            intent.putExtra("win", Constants.checkWin(generated));
+
+            startActivityForResult(intent, Constants.REQUEST_CODE);
         });
 
 
@@ -72,5 +93,14 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
         hold3.setOnCheckedChangeListener((buttonView, isChecked) -> {
             hold3_checked = isChecked;
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_CODE) {
+            Integer value = data.getIntExtra("value", 0);
+
+            Toast.makeText(PracticalTest01Var06MainActivity.this, value.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

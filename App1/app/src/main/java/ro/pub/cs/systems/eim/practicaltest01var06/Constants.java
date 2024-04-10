@@ -8,6 +8,8 @@ public class Constants {
 
     public static HashSet<String> symbols = new HashSet<>(Arrays.asList("*", "1", "2", "3"));
 
+    public static int REQUEST_CODE = 1473;
+
     public static ArrayList<String> generateRandom() {
         // Create a Random object
         Random random = new Random();
@@ -24,4 +26,29 @@ public class Constants {
         return generated;
     }
 
+
+    public static boolean checkWin(ArrayList<String> generated) {
+        String n1 = generated.get(0);
+        String n2 = generated.get(1);
+        String n3 = generated.get(2);
+
+        return (n1 == n2 && n2 == n3) || (n1 == "*" && n2 == n3) || (n2 == "*" && n1 == n3) || (n3 == "*" && n1 == n2)
+                || (n1 == "*" && n2 == "*") || (n1 == "*" && n3 == "*") || (n2 == "*" && n3 == "*");
+    }
+
+    public static int winAmount(Integer checks) {
+        if (checks == 0) {
+            return 100;
+        }
+
+        if (checks == 1) {
+            return 50;
+        }
+
+        if (checks == 2) {
+            return 10;
+        }
+
+        return 0;
+    }
 }
