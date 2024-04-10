@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -29,6 +30,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
                 Log.d(TAG, message);
                 Log.d(TAG, scor.toString());
                 Log.d(TAG, date);
+
+                Toast.makeText(context, message + "; " + scor + "; " + date, Toast.LENGTH_SHORT).show();
             }
         }
     }
