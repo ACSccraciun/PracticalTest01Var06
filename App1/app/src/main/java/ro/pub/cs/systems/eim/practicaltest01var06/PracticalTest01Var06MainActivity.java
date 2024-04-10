@@ -111,17 +111,21 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
             if (Constants.checkWin(generated)) {
                 new_scor = Constants.winAmount(count_checks);
 
-                if (new_scor != scor) {
+                if (new_scor != 0) {
                     scor = new_scor;
                     launchSecond(generated, count_checks);
                 } else {
-                    Toast.makeText(PracticalTest01Var06MainActivity.this, scor.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PracticalTest01Var06MainActivity.this, "Score: " + scor.toString(), Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                launchSecond(generated, count_checks);
+
+                scor += new_scor;
             }
 
-
+            if (scor > 300) {
+                Intent intent = new Intent(PracticalTest01Var06MainActivity.this, PracticalTest01Var06Service.class);
+                intent.putExtra("scor", scor);
+                startService(intent);
+            }
         });
 
 
