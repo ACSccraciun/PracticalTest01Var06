@@ -3,6 +3,7 @@ package ro.pub.cs.systems.eim.practicaltest01var06;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,8 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
     private boolean hold1_checked, hold2_checked, hold3_checked;
 
     private Integer scor;
+
+    private MyBroadcastReceiver myBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,16 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
             if (saved != null) {
                 numar3.setText(saved);
             }
+
+            scor = savedInstanceState.getInt("scor");
         }
+
+        myBroadcastReceiver = new MyBroadcastReceiver();
+
+        // Înregistrează BroadcastReceiver-ul cu intenturile de difuzare dorite
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("action1");
+        registerReceiver(myBroadcastReceiver, intentFilter);
     }
 
     private void init() {
@@ -112,10 +124,7 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
                 new_scor = Constants.winAmount(count_checks);
 
                 if (new_scor != 0) {
-                    scor = new_scor;
                     launchSecond(generated, count_checks);
-                } else {
-                    Toast.makeText(PracticalTest01Var06MainActivity.this, "Score: " + scor.toString(), Toast.LENGTH_SHORT).show();
                 }
 
                 scor += new_scor;
@@ -159,5 +168,7 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
         outState.putString("numar1", numar1.getText().toString());
         outState.putString("numar2", numar2.getText().toString());
         outState.putString("numar3", numar3.getText().toString());
+        outState.putInt("scor", scor);
     }
+
 }
