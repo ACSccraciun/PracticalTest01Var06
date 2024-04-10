@@ -34,7 +34,11 @@ public class PracticalTest01Var06SecondaryActivity extends AppCompatActivity {
         ok.setOnClickListener(v -> {
             Intent result = new Intent();
 
-            result.putExtra("value", Constants.winAmount(checks));
+            if (win) {
+                result.putExtra("value", Constants.winAmount(checks));
+            } else {
+                result.putExtra("value", 0);
+            }
             setResult(RESULT_OK, result);
             finish();
         });

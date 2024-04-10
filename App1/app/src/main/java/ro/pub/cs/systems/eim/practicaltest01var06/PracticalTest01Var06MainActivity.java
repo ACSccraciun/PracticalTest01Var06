@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,6 +24,8 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
 
     private boolean hold1_checked, hold2_checked, hold3_checked;
 
+    private Integer scor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +34,23 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
         init();
 
         buttonListeners();
+
+        if (savedInstanceState != null) {
+            String saved = savedInstanceState.getString("numar1");
+            if (saved != null) {
+                numar1.setText(saved);
+            }
+
+            saved = savedInstanceState.getString("numar2");
+            if (saved != null) {
+                numar2.setText(saved);
+            }
+
+            saved = savedInstanceState.getString("numar3");
+            if (saved != null) {
+                numar3.setText(saved);
+            }
+        }
     }
 
     private void init() {
@@ -48,6 +68,22 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
         hold2_checked = false;
         hold3_checked = false;
 
+        scor = 0;
+    }
+
+    private void launchSecond(ArrayList<String> generated, Integer count_checks) {
+        Intent intent = new Intent(PracticalTest01Var06MainActivity.this, PracticalTest01Var06SecondaryActivity.class);
+
+
+        intent.putExtra("numar1", generated.get(0));
+        intent.putExtra("numar2", generated.get(1));
+        intent.putExtra("numar3", generated.get(2));
+
+        intent.putExtra("checks", count_checks);
+        intent.putExtra("win", Constants.checkWin(generated));
+
+
+        startActivityForResult(intent, Constants.REQUEST_CODE);
     }
 
     private void buttonListeners() {
@@ -57,28 +93,35 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
 
             if (!hold1_checked) {
                 numar1.setText(generated.get(0));
+            } else {
                 count_checks++;
             }
             if (!hold2_checked) {
                 numar2.setText(generated.get(1));
+            }else {
                 count_checks++;
             }
             if (!hold3_checked) {
                 numar3.setText(generated.get(2));
+            }else {
                 count_checks++;
             }
 
-            Intent intent = new Intent(PracticalTest01Var06MainActivity.this, PracticalTest01Var06SecondaryActivity.class);
+            Integer new_scor = 0;
+            if (Constants.checkWin(generated)) {
+                new_scor = Constants.winAmount(count_checks);
+
+                if (new_scor != scor) {
+                    scor = new_scor;
+                    launchSecond(generated, count_checks);
+                } else {
+                    Toast.makeText(PracticalTest01Var06MainActivity.this, scor.toString(), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                launchSecond(generated, count_checks);
+            }
 
 
-            intent.putExtra("numar1", generated.get(0));
-            intent.putExtra("numar2", generated.get(1));
-            intent.putExtra("numar3", generated.get(2));
-
-            intent.putExtra("checks", count_checks);
-            intent.putExtra("win", Constants.checkWin(generated));
-
-            startActivityForResult(intent, Constants.REQUEST_CODE);
         });
 
 
@@ -102,5 +145,13 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
 
             Toast.makeText(PracticalTest01Var06MainActivity.this, value.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // outState.putString(KEY_TEXT_VALUE, editText.getText().toString());
+        outState.putString("numar1", numar1.getText().toString());
+        outState.putString("numar2", numar2.getText().toString());
+        outState.putString("numar3", numar3.getText().toString());
     }
 }
