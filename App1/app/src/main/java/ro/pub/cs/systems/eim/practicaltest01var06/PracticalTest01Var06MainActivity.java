@@ -119,6 +119,8 @@ public class PracticalTest01Var06MainActivity extends AppCompatActivity {
                 }
 
                 scor += new_scor;
+            } else {
+                Toast.makeText(PracticalTest01Var06MainActivity.this, "Score: " + scor.toString(), Toast.LENGTH_SHORT).show();
             }
 
             if (scor > 300) {
